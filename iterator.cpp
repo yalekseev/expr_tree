@@ -1,10 +1,7 @@
 #include "iterator.h"
 #include "expr.h"
 
-#include <memory>
 #include <string>
-
-#include <iostream>
 
 Iterator::Iterator(const std::string& type, Expr* expr) {
     if (type == "post-order") {

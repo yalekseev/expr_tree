@@ -5,6 +5,8 @@
 #include <memory>
 #include <string>
 
+/* Expr */
+
 Iterator Expr::begin(const std::string& traversal) {
     return Iterator(traversal, static_cast<Expr*>(this));
 }
@@ -13,17 +15,66 @@ Iterator Expr::end(const std::string& traversal) {
     return Iterator(traversal, 0);
 }
 
+std::shared_ptr<Expr> Expr::left() const {
+    return 0;
+}
+
+std::shared_ptr<Expr> Expr::right() const {
+    return 0;
+}
+
+/* UnaryExpr */
+
+UnaryExpr::UnaryExpr(std::shared_ptr<Expr> expr) : m_expr(expr) { }
+
+std::shared_ptr<Expr> UnaryExpr::right() const {
+    return m_expr;
+}
+
+/* BinaryExpr */
+
+BinaryExpr::BinaryExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right)
+        : m_left(left), m_right(right) { }
+
+std::shared_ptr<Expr> BinaryExpr::left() const {
+    return m_left;
+}
+
+std::shared_ptr<Expr> BinaryExpr::right() const {
+    return m_right;
+}
+
+/* AddExpr */
+
+AddExpr::AddExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right)
+        : BinaryExpr (left, right) { }
+
 void AddExpr::accept(Visitor& visitor) {
     visitor.accept(*this);
 }
+
+/* SubExpr */
+
+SubExpr::SubExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right)
+        : BinaryExpr(left, right) { }
 
 void SubExpr::accept(Visitor& visitor) {
     visitor.accept(*this);
 }
 
+/* MulExpr */
+
+MulExpr::MulExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right)
+        : BinaryExpr(left, right) { }
+
 void MulExpr::accept(Visitor& visitor) {
     visitor.accept(*this);
 }
+
+/* DivExpr */
+
+DivExpr::DivExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right)
+        : BinaryExpr(left, right) { }
 
 void DivExpr::accept(Visitor& visitor) {
     visitor.accept(*this);

@@ -17,38 +17,30 @@ public:
 
     Iterator end(const std::string& traversal = "post-order");
 
-    virtual std::shared_ptr<Expr> left() const {
-        return 0;
-    }
+    virtual std::shared_ptr<Expr> left() const;
 
-    virtual std::shared_ptr<Expr> right() const {
-        return 0;
-    }
+    virtual std::shared_ptr<Expr> right() const;
 };
 
 class UnaryExpr : public Expr {
 public:
-    explicit UnaryExpr(std::shared_ptr<Expr> expr) : m_expr(expr) { }
+    explicit UnaryExpr(std::shared_ptr<Expr> expr);
 
-    virtual std::shared_ptr<Expr> right() const {
-        return m_expr;
-    }
+    virtual std::shared_ptr<Expr> right() const;
 
+private:
     std::shared_ptr<Expr> m_expr;
 };
 
 class BinaryExpr : public Expr {
 public:
-    BinaryExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right) : m_left(left), m_right(right) { }
+    BinaryExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right);
 
-    virtual std::shared_ptr<Expr> left() const {
-        return m_left;
-    }
+    virtual std::shared_ptr<Expr> left() const;
 
-    virtual std::shared_ptr<Expr> right() const {
-        return m_right;
-    }
+    virtual std::shared_ptr<Expr> right() const;
 
+private:
     std::shared_ptr<Expr> m_left;
     std::shared_ptr<Expr> m_right;
 };
@@ -63,6 +55,7 @@ public:
         return m_val;
     }
 
+private:
     double m_val;
 };
 
@@ -79,28 +72,28 @@ public:
 
 class AddExpr : public BinaryExpr {
 public:
-    AddExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right) : BinaryExpr (left, right) { }
+    AddExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right);
 
     virtual void accept(Visitor& visitor);
 };
 
 class SubExpr : public BinaryExpr {
 public:
-    SubExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right) : BinaryExpr(left, right) { }
+    SubExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right);
 
     virtual void accept(Visitor& visitor);
 };
 
 class MulExpr : public BinaryExpr {
 public:
-    MulExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right) : BinaryExpr(left, right) { }
+    MulExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right);
 
     virtual void accept(Visitor& visitor);
 };
 
 class DivExpr : public BinaryExpr {
 public:
-    DivExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right) : BinaryExpr(left, right) { }
+    DivExpr(std::shared_ptr<Expr> left, std::shared_ptr<Expr> right);
 
     virtual void accept(Visitor& visitor);
 };
