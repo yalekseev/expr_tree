@@ -17,6 +17,10 @@ public:
 
     Expr& operator*();
 
+    bool operator==(const Iterator& other) const;
+
+    bool operator!=(const Iterator& other) const;
+
 private:
     std::shared_ptr<IteratorImpl> m_impl;
 };
@@ -28,7 +32,10 @@ public:
     virtual IteratorImpl& operator++() = 0;
 
     virtual Expr* operator->() = 0;
+
     virtual Expr& operator*() = 0;
+
+    virtual bool operator==(const IteratorImpl& other) const = 0;
 };
 
 class PostOrderIteratorImpl : public IteratorImpl {
@@ -43,7 +50,7 @@ public:
 
     virtual Expr* operator->();
 
-    bool operator==(const PostOrderIteratorImpl& other) const;
+    bool operator==(const IteratorImpl& other) const;
 
 private:
     std::stack<Expr*> m_stack;

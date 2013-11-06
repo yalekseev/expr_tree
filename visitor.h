@@ -14,8 +14,10 @@ public:
     virtual void accept(const SubExpr& expr) = 0;
     virtual void accept(const MulExpr& expr) = 0;
     virtual void accept(const DivExpr& expr) = 0;
+    virtual void accept(const PlusExpr& expr) = 0;
     virtual void accept(const MinusExpr& expr) = 0;
     virtual void accept(const ConstExpr& expr) = 0;
+    virtual void accept(const VarExpr& expr) = 0;
 };
 
 class EvalVisitor : public Visitor {
@@ -67,8 +69,16 @@ public:
         m_stack.push(-1 * val);
     }
 
+    virtual void accept(const PlusExpr& expr) {
+        // do nothing
+    }
+
     virtual void accept(const ConstExpr& expr) {
         m_stack.push(expr);
+    }
+
+    virtual void accept(const VarExpr& expr) {
+        // do nothing
     }
 
     double result() const {

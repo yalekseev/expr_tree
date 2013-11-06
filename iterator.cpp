@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 
+#include <iostream>
+
 Iterator::Iterator(const std::string& type, Expr* expr) {
     if (type == "post-order") {
         m_impl.reset(new PostOrderIteratorImpl(expr));
@@ -16,13 +18,20 @@ Iterator& Iterator::operator++() {
 }
 
 Expr* Iterator::operator->() {
-    return (*m_impl).operator->();
+    return m_impl->operator->();
 }
 
 Expr& Iterator::operator*() {
     return **m_impl;
 }
 
+bool Iterator::operator==(const Iterator& other) const {
+    return *m_impl == *(other.m_impl);
+}
+
+bool Iterator::operator!=(const Iterator& other) const {
+    return !(*this == other);
+}
 
 PostOrderIteratorImpl::PostOrderIteratorImpl(Expr* expr) {
     if (expr != 0) {
@@ -54,6 +63,10 @@ PostOrderIteratorImpl& PostOrderIteratorImpl::operator++() {
     Expr* child = m_stack.top();
     m_stack.pop();
 
+    if (m_stack.empty()) {
+        return *this;
+    }
+
     if (child == m_stack.top()->left().get()) {
         // done with the left subtree
         if (m_stack.top()->right() != 0) {
@@ -70,6 +83,23 @@ Expr* PostOrderIteratorImpl::operator->() {
     return m_stack.top();
 }
 
-bool PostOrderIteratorImpl::operator==(const PostOrderIteratorImpl& other) const {
-    return m_stack == other.m_stack;
+bool PostOrderIteratorImpl::operator==(const IteratorImpl& other) const {
+    const PostOrderIteratorImpl* post_order_iterator = dynamic_cast<const PostOrderIteratorImpl *>(&other);
+    if (post_order_iterator == 0) {
+        return false;
+    }
+
+    if (m_stack.empty() && post_order_iterator->m_stack.empty()) {
+        return true;
+    }
+
+    if (m_stack.empty() || post_order_iterator->m_stack.empty()) {
+        return false;
+    }
+
+    if (m_stack.top() == post_order_iterator->m_stack.top()) {
+        return true;
+    }
+
+    return false;
 }

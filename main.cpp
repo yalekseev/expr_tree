@@ -8,7 +8,7 @@
 double eval(std::shared_ptr<Expr> expr) {
     EvalVisitor visitor;
 
-    for (Iterator it = expr->begin("post-order"); ; ++it) {
+    for (Iterator it = expr->begin("post-order"); it != expr->end("post-order"); ++it) {
         it->accept(visitor);
     }
 
