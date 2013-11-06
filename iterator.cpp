@@ -103,3 +103,7 @@ bool PostOrderIteratorImpl::operator==(const IteratorImpl& other) const {
 
     return false;
 }
+
+bool PostOrderIteratorImpl::operator!=(const IteratorImpl& other) const {
+    return !(*this == other);
+}

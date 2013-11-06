@@ -10,7 +10,7 @@ Iterator Expr::begin(const std::string& traversal) {
 }
 
 Iterator Expr::end(const std::string& traversal) {
-    return Iterator(traversal);
+    return Iterator(traversal, 0);
 }
 
 void AddExpr::accept(Visitor& visitor) {

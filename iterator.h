@@ -7,9 +7,9 @@
 class Expr;
 class IteratorImpl;
 
-class Iterator {
+class Iterator final {
 public:
-    explicit Iterator(const std::string& type, Expr* expr = 0);
+    Iterator(const std::string& type, Expr* expr);
 
     Iterator& operator++();
 
@@ -36,6 +36,8 @@ public:
     virtual Expr& operator*() = 0;
 
     virtual bool operator==(const IteratorImpl& other) const = 0;
+
+    virtual bool operator!=(const IteratorImpl& other) const = 0;
 };
 
 class PostOrderIteratorImpl : public IteratorImpl {
@@ -51,6 +53,8 @@ public:
     virtual Expr* operator->();
 
     bool operator==(const IteratorImpl& other) const;
+
+    bool operator!=(const IteratorImpl& other) const;
 
 private:
     std::stack<Expr*> m_stack;

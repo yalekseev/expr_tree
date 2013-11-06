@@ -17,7 +17,7 @@ double eval(std::shared_ptr<Expr> expr) {
 
 
 int main() {
-    std::shared_ptr<Expr> expr = Add(Const(10), Const(5));
+    std::shared_ptr<Expr> expr = Mul(Const(2), Add(Const(10), Const(5)));
 
     std::cout << eval(expr) << std::endl;
 

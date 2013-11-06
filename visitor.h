@@ -1,9 +1,7 @@
 #pragma once
 
 #include "expr.h"
-#include "iterator.h"
 
-#include <memory>
 #include <stack>
 
 class Visitor {
@@ -22,68 +20,23 @@ public:
 
 class EvalVisitor : public Visitor {
 public:
-    virtual void accept(const AddExpr& expr) {
-        double left = m_stack.top();
-        m_stack.pop();
+    virtual void accept(const AddExpr& expr);
 
-        double right = m_stack.top();
-        m_stack.pop();
+    virtual void accept(const SubExpr& expr);
 
-        m_stack.push(left + right);
-    }
+    virtual void accept(const MulExpr& expr);
 
-    virtual void accept(const SubExpr& expr) {
-        double left = m_stack.top();
-        m_stack.pop();
+    virtual void accept(const DivExpr& expr);
 
-        double right = m_stack.top();
-        m_stack.pop();
+    virtual void accept(const MinusExpr& expr);
 
-        m_stack.push(left - right);
-    }
+    virtual void accept(const PlusExpr& expr);
 
-    virtual void accept(const MulExpr& expr) {
-        double left = m_stack.top();
-        m_stack.pop();
+    virtual void accept(const ConstExpr& expr);
 
-        double right = m_stack.top();
-        m_stack.pop();
+    virtual void accept(const VarExpr& expr);
 
-        m_stack.push(left * right);
-    }
-
-    virtual void accept(const DivExpr& expr) {
-        double left = m_stack.top();
-        m_stack.pop();
-
-        double right = m_stack.top();
-        m_stack.pop();
-
-        m_stack.push(left / right);
-    }
-
-    virtual void accept(const MinusExpr& expr) {
-        double val = m_stack.top();
-        m_stack.pop();
-
-        m_stack.push(-1 * val);
-    }
-
-    virtual void accept(const PlusExpr& expr) {
-        // do nothing
-    }
-
-    virtual void accept(const ConstExpr& expr) {
-        m_stack.push(expr);
-    }
-
-    virtual void accept(const VarExpr& expr) {
-        // do nothing
-    }
-
-    double result() const {
-        return m_stack.top();
-    }
+    double result() const;
 
 private:
     std::stack<double> m_stack;
