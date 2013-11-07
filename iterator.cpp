@@ -4,11 +4,13 @@
 #include <stdexcept>
 #include <string>
 
+/* Iterator */
+
 Iterator::Iterator(const std::string& type, Expr* expr) {
     if (type == "in-order") {
-        m_impl.reset(new InOrderIteratorImpl(expr));
+        m_impl.reset(new impl::InOrderIteratorImpl(expr));
     } else if (type == "post-order") {
-        m_impl.reset(new PostOrderIteratorImpl(expr));
+        m_impl.reset(new impl::PostOrderIteratorImpl(expr));
     } else {
         throw std::runtime_error("Unknown iterator type: " + type);
     }
@@ -35,32 +37,14 @@ bool Iterator::operator!=(const Iterator& other) const {
     return !(*this == other);
 }
 
+namespace impl {
+
 /* PostOrderIteratorImpl */
 
 PostOrderIteratorImpl::PostOrderIteratorImpl(Expr* expr) {
     if (expr != 0) {
         get_next(expr);
     }
-}
-
-void PostOrderIteratorImpl::get_next(Expr* expr) {
-    while (expr->left() || expr->right()) {
-        if (expr->left()) {
-            m_stack.push(expr);
-
-            expr = &(*(expr->left()));
-            continue;
-        }
-
-        if (expr->right()) {
-            m_stack.push(expr);
-
-            expr = &(*(expr->right()));
-            continue;
-        }
-    }
-
-    m_stack.push(expr);
 }
 
 PostOrderIteratorImpl& PostOrderIteratorImpl::operator++() {
@@ -110,6 +94,26 @@ bool PostOrderIteratorImpl::operator==(const IteratorImpl& other) const {
 
 bool PostOrderIteratorImpl::operator!=(const IteratorImpl& other) const {
     return !(*this == other);
+}
+
+void PostOrderIteratorImpl::get_next(Expr* expr) {
+    while (expr->left() || expr->right()) {
+        if (expr->left()) {
+            m_stack.push(expr);
+
+            expr = &(*(expr->left()));
+            continue;
+        }
+
+        if (expr->right()) {
+            m_stack.push(expr);
+
+            expr = &(*(expr->right()));
+            continue;
+        }
+    }
+
+    m_stack.push(expr);
 }
 
 /* InOrderIteratorImpl */
@@ -172,3 +176,5 @@ void InOrderIteratorImpl::get_next(Expr* expr) {
 
     m_stack.push(expr);
 }
+
+} // namespace impl

@@ -5,7 +5,12 @@
 #include <stack>
 
 class Expr;
+
+namespace impl {
 class IteratorImpl;
+}
+
+/* Iterator */
 
 class Iterator final {
 public:
@@ -22,9 +27,12 @@ public:
     bool operator!=(const Iterator& other) const;
 
 private:
-    std::shared_ptr<IteratorImpl> m_impl;
+    std::shared_ptr<impl::IteratorImpl> m_impl;
 };
 
+namespace impl {
+
+/*! \brief A base class of concrete iterators hierarchy */
 class IteratorImpl {
 public:
     virtual ~IteratorImpl() { }
@@ -83,3 +91,5 @@ private:
 
     std::stack<Expr*> m_stack;
 };
+
+} // namespace impl
