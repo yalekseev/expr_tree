@@ -15,11 +15,23 @@ double eval(Expr& expr) {
     return visitor.result();
 }
 
+std::string print(Expr& expr) {
+    PrintVisitor visitor;
+
+    for (auto& expr_node : expr) {
+        expr_node.accept(visitor);
+    }
+
+    return visitor.result();
+}
+
 
 int main() {
     std::shared_ptr<Expr> expr = Div(Mul(Const(2), Add(Const(10), Const(5))), Mul(Const(2), Const(5)));
 
     std::cout << eval(*expr) << std::endl;
+
+    std::cout << print(*expr) << std::endl;
 
     return 0;
 }

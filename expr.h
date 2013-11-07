@@ -28,7 +28,7 @@ class UnaryExpr : public Expr {
 public:
     explicit UnaryExpr(std::shared_ptr<Expr> expr);
 
-    virtual std::shared_ptr<Expr> right() const;
+    virtual std::shared_ptr<Expr> left() const;
 
 private:
     std::shared_ptr<Expr> m_expr;

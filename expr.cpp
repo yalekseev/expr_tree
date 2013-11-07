@@ -27,7 +27,7 @@ std::shared_ptr<Expr> Expr::right() const {
 
 UnaryExpr::UnaryExpr(std::shared_ptr<Expr> expr) : m_expr(expr) { }
 
-std::shared_ptr<Expr> UnaryExpr::right() const {
+std::shared_ptr<Expr> UnaryExpr::left() const {
     return m_expr;
 }
 

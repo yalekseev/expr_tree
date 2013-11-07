@@ -1,11 +1,16 @@
 #include "iterator.h"
 #include "expr.h"
 
+#include <stdexcept>
 #include <string>
 
 Iterator::Iterator(const std::string& type, Expr* expr) {
-    if (type == "post-order") {
+    if (type == "in-order") {
+        m_impl.reset(new InOrderIteratorImpl(expr));
+    } else if (type == "post-order") {
         m_impl.reset(new PostOrderIteratorImpl(expr));
+    } else {
+        throw std::runtime_error("Unknown iterator type: " + type);
     }
 }
 
@@ -29,6 +34,8 @@ bool Iterator::operator==(const Iterator& other) const {
 bool Iterator::operator!=(const Iterator& other) const {
     return !(*this == other);
 }
+
+/* PostOrderIteratorImpl */
 
 PostOrderIteratorImpl::PostOrderIteratorImpl(Expr* expr) {
     if (expr != 0) {
@@ -103,4 +110,65 @@ bool PostOrderIteratorImpl::operator==(const IteratorImpl& other) const {
 
 bool PostOrderIteratorImpl::operator!=(const IteratorImpl& other) const {
     return !(*this == other);
+}
+
+/* InOrderIteratorImpl */
+
+InOrderIteratorImpl::InOrderIteratorImpl(Expr* expr) {
+    if (expr != 0) {
+        get_next(expr);
+    }
+}
+
+InOrderIteratorImpl& InOrderIteratorImpl::operator++() {
+    Expr* node = m_stack.top();
+    m_stack.pop();
+
+    if (node->right().get() != 0) {
+        get_next(node);
+    }
+
+    return *this;
+}
+
+Expr* InOrderIteratorImpl::operator->() {
+    return m_stack.top();
+}
+
+Expr& InOrderIteratorImpl::operator*() {
+    return *(m_stack.top());
+}
+
+bool InOrderIteratorImpl::operator==(const IteratorImpl& other) const {
+    const InOrderIteratorImpl* in_order_iterator = dynamic_cast<const InOrderIteratorImpl*>(&other);
+    if (in_order_iterator == 0) {
+        return false;
+    }
+
+    if (m_stack.empty() && in_order_iterator->m_stack.empty()) {
+        return true;
+    }
+
+    if (m_stack.empty() || in_order_iterator->m_stack.empty()) {
+        return false;
+    }
+
+    if (m_stack.top() == in_order_iterator->m_stack.top()) {
+        return true;
+    }
+
+    return false;
+}
+
+bool InOrderIteratorImpl::operator!=(const IteratorImpl& other) const {
+    return !(*this == other);
+}
+
+void InOrderIteratorImpl::get_next(Expr* expr) {
+    while (expr->left().get() != 0) {
+        m_stack.push(expr);
+        expr = expr->left().get();
+    }
+
+    m_stack.push(expr);
 }
