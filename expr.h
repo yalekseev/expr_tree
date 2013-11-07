@@ -47,13 +47,11 @@ private:
 
 class ConstExpr : public Expr {
 public:
-    explicit ConstExpr(double val) : m_val(val) { }
+    explicit ConstExpr(double val);
 
     virtual void accept(Visitor& visitor);
 
-    operator double() const {
-        return m_val;
-    }
+    operator double() const;
 
 private:
     double m_val;
@@ -61,10 +59,13 @@ private:
 
 class VarExpr : public Expr {
 public:
-    explicit VarExpr(const std::string& name) : m_name(name) { }
+    explicit VarExpr(const std::string& name);
 
     virtual void accept(Visitor& visitor);
 
+    operator std::string() const;
+
+private:
     std::string m_name;
 };
 
@@ -102,14 +103,14 @@ public:
 
 class MinusExpr : public UnaryExpr {
 public:
-    explicit MinusExpr(std::shared_ptr<Expr> expr) : UnaryExpr(expr) { }
+    explicit MinusExpr(std::shared_ptr<Expr> expr);
 
     virtual void accept(Visitor& visitor);
 };
 
 class PlusExpr : public UnaryExpr {
 public:
-    explicit PlusExpr(std::shared_ptr<Expr> expr) : UnaryExpr(expr) { }
+    explicit PlusExpr(std::shared_ptr<Expr> expr);
 
     virtual void accept(Visitor& visitor);
 };

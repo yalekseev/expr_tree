@@ -80,16 +80,40 @@ void DivExpr::accept(Visitor& visitor) {
     visitor.accept(*this);
 }
 
+/* MinusExpr */
+
+MinusExpr::MinusExpr(std::shared_ptr<Expr> expr) : UnaryExpr(expr) { }
+
 void MinusExpr::accept(Visitor& visitor) {
     visitor.accept(*this);
 }
+
+/* PlusExpr */
+
+PlusExpr::PlusExpr(std::shared_ptr<Expr> expr) : UnaryExpr(expr) { }
 
 void PlusExpr::accept(Visitor& visitor) {
     visitor.accept(*this);
 }
 
+/* ConstExpr */
+
+ConstExpr::ConstExpr(double val) : m_val(val) { }
+
+ConstExpr::operator double() const {
+    return m_val;
+}
+
 void ConstExpr::accept(Visitor& visitor) {
     visitor.accept(*this);
+}
+
+/* VarExpr */
+
+VarExpr::VarExpr(const std::string& name) : m_name(name) { }
+
+VarExpr::operator std::string() const {
+    return m_name;
 }
 
 void VarExpr::accept(Visitor& visitor) {
