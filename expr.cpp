@@ -7,12 +7,12 @@
 
 /* Expr */
 
-Iterator Expr::begin(const std::string& traversal) {
-    return Iterator(traversal, static_cast<Expr*>(this));
+Expr::iterator Expr::begin(const std::string& traversal) {
+    return iterator(traversal, static_cast<Expr*>(this));
 }
 
-Iterator Expr::end(const std::string& traversal) {
-    return Iterator(traversal, 0);
+Expr::iterator Expr::end(const std::string& traversal) {
+    return iterator(traversal, 0);
 }
 
 std::shared_ptr<Expr> Expr::left() const {

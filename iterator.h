@@ -40,6 +40,8 @@ public:
     virtual bool operator!=(const IteratorImpl& other) const = 0;
 };
 
+/* PostOrderIteratorImpl */
+
 class PostOrderIteratorImpl : public IteratorImpl {
 public:
     explicit PostOrderIteratorImpl(Expr* expr = 0);
@@ -58,4 +60,10 @@ public:
 
 private:
     std::stack<Expr*> m_stack;
+};
+
+/* InOrderIteratorImpl */
+
+class InOrderIteratorImpl : public IteratorImpl {
+
 };

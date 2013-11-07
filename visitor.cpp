@@ -33,10 +33,10 @@ void EvalVisitor::accept(const MulExpr& expr) {
 }
 
 void EvalVisitor::accept(const DivExpr& expr) {
-    double left = m_stack.top();
+    double right = m_stack.top();
     m_stack.pop();
 
-    double right = m_stack.top();
+    double left = m_stack.top();
     m_stack.pop();
 
     m_stack.push(left / right);

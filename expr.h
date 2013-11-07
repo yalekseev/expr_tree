@@ -9,13 +9,15 @@ class Visitor;
 
 class Expr {
 public:
+    typedef Iterator iterator;
+
     virtual ~Expr() { }
 
     virtual void accept(Visitor& visitor) = 0;
 
-    Iterator begin(const std::string& traversal = "post-order");
+    iterator begin(const std::string& traversal = "post-order");
 
-    Iterator end(const std::string& traversal = "post-order");
+    iterator end(const std::string& traversal = "post-order");
 
     virtual std::shared_ptr<Expr> left() const;
 

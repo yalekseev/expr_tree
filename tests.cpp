@@ -5,11 +5,11 @@
 #include <iostream>
 
 
-double eval(std::shared_ptr<Expr> expr) {
+double eval(Expr& expr) {
     EvalVisitor visitor;
 
-    for (Iterator it = expr->begin("post-order"); it != expr->end("post-order"); ++it) {
-        it->accept(visitor);
+    for (auto& expr_node : expr) {
+        expr_node.accept(visitor);
     }
 
     return visitor.result();
@@ -17,9 +17,9 @@ double eval(std::shared_ptr<Expr> expr) {
 
 
 int main() {
-    std::shared_ptr<Expr> expr = Mul(Const(2), Add(Const(10), Const(5)));
+    std::shared_ptr<Expr> expr = Div(Mul(Const(2), Add(Const(10), Const(5))), Mul(Const(2), Const(5)));
 
-    std::cout << eval(expr) << std::endl;
+    std::cout << eval(*expr) << std::endl;
 
     return 0;
 }
