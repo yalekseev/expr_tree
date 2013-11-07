@@ -10,10 +10,11 @@ namespace impl {
 class IteratorImpl;
 }
 
-/* Iterator */
-
+/*! \brief Iterator class used directly by user */
 class Iterator final {
 public:
+    Iterator() = delete;
+
     Iterator(const std::string& type, Expr* expr);
 
     Iterator& operator++();
@@ -48,17 +49,34 @@ public:
     virtual bool operator!=(const IteratorImpl& other) const = 0;
 };
 
-/* PostOrderIteratorImpl */
-
-class PostOrderIteratorImpl : public IteratorImpl {
+/*! \brief Implementation of pre-order iterator */
+class PreOrderIteratorImpl : public IteratorImpl {
 public:
-    explicit PostOrderIteratorImpl(Expr* expr = 0);
+    explicit PreOrderIteratorImpl(Expr* expr = 0);
 
-    virtual PostOrderIteratorImpl& operator++();
+    virtual PreOrderIteratorImpl& operator++();
+
+    virtual Expr* operator->();
 
     virtual Expr& operator*();
 
+    virtual bool operator==(const IteratorImpl& other) const;
+
+    virtual bool operator!=(const IteratorImpl& other) const;
+
+    std::stack<Expr*> m_stack;
+};
+
+/*! \brief Implementation of in-order iterator */
+class InOrderIteratorImpl : public IteratorImpl {
+public:
+    explicit InOrderIteratorImpl(Expr* expr = 0);
+
+    virtual InOrderIteratorImpl& operator++();
+
     virtual Expr* operator->();
+
+    virtual Expr& operator*();
 
     virtual bool operator==(const IteratorImpl& other) const;
 
@@ -70,17 +88,16 @@ private:
     std::stack<Expr*> m_stack;
 };
 
-/* InOrderIteratorImpl */
-
-class InOrderIteratorImpl : public IteratorImpl {
+/*! \brief Implementation of pre-order iterator */
+class PostOrderIteratorImpl : public IteratorImpl {
 public:
-    explicit InOrderIteratorImpl(Expr* expr = 0);
+    explicit PostOrderIteratorImpl(Expr* expr = 0);
 
-    virtual InOrderIteratorImpl& operator++();
-
-    virtual Expr* operator->();
+    virtual PostOrderIteratorImpl& operator++();
 
     virtual Expr& operator*();
+
+    virtual Expr* operator->();
 
     virtual bool operator==(const IteratorImpl& other) const;
 

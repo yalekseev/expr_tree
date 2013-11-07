@@ -7,7 +7,9 @@
 /* Iterator */
 
 Iterator::Iterator(const std::string& type, Expr* expr) {
-    if (type == "in-order") {
+    if (type == "pre-order") {
+        m_impl.reset(new impl::PreOrderIteratorImpl(expr));
+    } else if (type == "in-order") {
         m_impl.reset(new impl::InOrderIteratorImpl(expr));
     } else if (type == "post-order") {
         m_impl.reset(new impl::PostOrderIteratorImpl(expr));
@@ -38,6 +40,121 @@ bool Iterator::operator!=(const Iterator& other) const {
 }
 
 namespace impl {
+
+/* PreOrderIteratorImpl */
+
+PreOrderIteratorImpl::PreOrderIteratorImpl(Expr* expr) {
+    m_stack.push(expr);
+}
+
+PreOrderIteratorImpl& PreOrderIteratorImpl::operator++() {
+    Expr* node = m_stack.top();
+    m_stack.pop();
+
+    if (node->left().get() != 0) {
+        m_stack.push(node->left().get());
+    }
+
+    if (node->right().get() != 0) {
+        m_stack.push(node->right().get());
+    }
+
+    return *this;
+}
+
+Expr* PreOrderIteratorImpl::operator->() {
+    return m_stack.top();
+}
+
+Expr& PreOrderIteratorImpl::operator*() {
+    return *(m_stack.top());
+}
+
+bool PreOrderIteratorImpl::operator==(const IteratorImpl& other) const {
+    const PreOrderIteratorImpl* in_order_iterator = dynamic_cast<const PreOrderIteratorImpl*>(&other);
+    if (in_order_iterator == 0) {
+        return false;
+    }
+
+    if (m_stack.empty() && in_order_iterator->m_stack.empty()) {
+        return true;
+    }
+
+    if (m_stack.empty() || in_order_iterator->m_stack.empty()) {
+        return false;
+    }
+
+    if (m_stack.top() == in_order_iterator->m_stack.top()) {
+        return true;
+    }
+
+    return false;
+}
+
+bool PreOrderIteratorImpl::operator!=(const IteratorImpl& other) const {
+    return !(*this == other);
+}
+
+/* InOrderIteratorImpl */
+
+InOrderIteratorImpl::InOrderIteratorImpl(Expr* expr) {
+    if (expr != 0) {
+        get_next(expr);
+    }
+}
+
+InOrderIteratorImpl& InOrderIteratorImpl::operator++() {
+    Expr* node = m_stack.top();
+    m_stack.pop();
+
+    if (node->right().get() != 0) {
+        get_next(node);
+    }
+
+    return *this;
+}
+
+Expr* InOrderIteratorImpl::operator->() {
+    return m_stack.top();
+}
+
+Expr& InOrderIteratorImpl::operator*() {
+    return *(m_stack.top());
+}
+
+bool InOrderIteratorImpl::operator==(const IteratorImpl& other) const {
+    const InOrderIteratorImpl* in_order_iterator = dynamic_cast<const InOrderIteratorImpl*>(&other);
+    if (in_order_iterator == 0) {
+        return false;
+    }
+
+    if (m_stack.empty() && in_order_iterator->m_stack.empty()) {
+        return true;
+    }
+
+    if (m_stack.empty() || in_order_iterator->m_stack.empty()) {
+        return false;
+    }
+
+    if (m_stack.top() == in_order_iterator->m_stack.top()) {
+        return true;
+    }
+
+    return false;
+}
+
+bool InOrderIteratorImpl::operator!=(const IteratorImpl& other) const {
+    return !(*this == other);
+}
+
+void InOrderIteratorImpl::get_next(Expr* expr) {
+    while (expr->left().get() != 0) {
+        m_stack.push(expr);
+        expr = expr->left().get();
+    }
+
+    m_stack.push(expr);
+}
 
 /* PostOrderIteratorImpl */
 
@@ -111,67 +228,6 @@ void PostOrderIteratorImpl::get_next(Expr* expr) {
             expr = &(*(expr->right()));
             continue;
         }
-    }
-
-    m_stack.push(expr);
-}
-
-/* InOrderIteratorImpl */
-
-InOrderIteratorImpl::InOrderIteratorImpl(Expr* expr) {
-    if (expr != 0) {
-        get_next(expr);
-    }
-}
-
-InOrderIteratorImpl& InOrderIteratorImpl::operator++() {
-    Expr* node = m_stack.top();
-    m_stack.pop();
-
-    if (node->right().get() != 0) {
-        get_next(node);
-    }
-
-    return *this;
-}
-
-Expr* InOrderIteratorImpl::operator->() {
-    return m_stack.top();
-}
-
-Expr& InOrderIteratorImpl::operator*() {
-    return *(m_stack.top());
-}
-
-bool InOrderIteratorImpl::operator==(const IteratorImpl& other) const {
-    const InOrderIteratorImpl* in_order_iterator = dynamic_cast<const InOrderIteratorImpl*>(&other);
-    if (in_order_iterator == 0) {
-        return false;
-    }
-
-    if (m_stack.empty() && in_order_iterator->m_stack.empty()) {
-        return true;
-    }
-
-    if (m_stack.empty() || in_order_iterator->m_stack.empty()) {
-        return false;
-    }
-
-    if (m_stack.top() == in_order_iterator->m_stack.top()) {
-        return true;
-    }
-
-    return false;
-}
-
-bool InOrderIteratorImpl::operator!=(const IteratorImpl& other) const {
-    return !(*this == other);
-}
-
-void InOrderIteratorImpl::get_next(Expr* expr) {
-    while (expr->left().get() != 0) {
-        m_stack.push(expr);
-        expr = expr->left().get();
     }
 
     m_stack.push(expr);
