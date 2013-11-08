@@ -6,6 +6,8 @@
 #include <string>
 #include <stack>
 
+namespace util {
+
 /* Visitor */
 
 class Visitor {
@@ -73,3 +75,5 @@ public:
 private:
     std::ostringstream os;
 };
+
+} // namespace util

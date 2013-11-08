@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <string>
 
+namespace util {
+
 /* Iterator */
 
 Iterator::Iterator(const std::string& type, Expr* expr) {
@@ -292,3 +294,5 @@ bool LevelOrderIteratorImpl::operator!=(const IteratorImpl& other) const {
 }
 
 } // namespace impl
+
+} // namespace util

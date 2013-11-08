@@ -1,6 +1,8 @@
 #include "visitor.h"
 #include "expr.h"
 
+namespace util {
+
 /* EvalVisitor */
 
 void EvalVisitor::accept(const AddExpr& expr) {
@@ -103,3 +105,5 @@ void PrintVisitor::accept(const VarExpr& expr) {
 std::string PrintVisitor::result() const {
     return os.str();
 }
+
+} // namespace util

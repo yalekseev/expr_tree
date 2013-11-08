@@ -5,6 +5,8 @@
 #include <memory>
 #include <string>
 
+namespace util {
+
 /* Expr */
 
 Expr::iterator Expr::begin(const std::string& traversal) {
@@ -155,3 +157,5 @@ std::shared_ptr<Expr> Const(double val) {
 std::shared_ptr<Expr> Var(const std::string& name) {
     return std::shared_ptr<Expr>(new VarExpr(name));
 }
+
+} // namespace util

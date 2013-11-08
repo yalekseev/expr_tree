@@ -5,6 +5,8 @@
 #include <queue>
 #include <stack>
 
+namespace util {
+
 class Expr;
 
 namespace impl {
@@ -130,3 +132,5 @@ private:
 };
 
 } // namespace impl
+
+} // namespace util

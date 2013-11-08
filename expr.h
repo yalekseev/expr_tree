@@ -5,6 +5,8 @@
 #include <memory>
 #include <string>
 
+namespace util {
+
 class Visitor;
 
 class Expr {
@@ -136,3 +138,5 @@ extern std::shared_ptr<Expr> Plus(std::shared_ptr<Expr> expr);
 extern std::shared_ptr<Expr> Const(double val);
 
 extern std::shared_ptr<Expr> Var(const std::string& name);
+
+} // namespace util

@@ -2,6 +2,8 @@
 #include "visitor.h"
 #include "expr.h"
 
+namespace util {
+
 double eval(Expr& expr) {
     EvalVisitor visitor;
 
@@ -21,3 +23,5 @@ std::string print(Expr& expr, const std::string& traversal) {
 
     return visitor.result();
 }
+
+} // namespace util
