@@ -13,6 +13,8 @@ Iterator::Iterator(const std::string& type, Expr* expr) {
         m_impl.reset(new impl::InOrderIteratorImpl(expr));
     } else if (type == "post-order") {
         m_impl.reset(new impl::PostOrderIteratorImpl(expr));
+    } else if (type == "level-order") {
+        m_impl.reset(new impl::LevelOrderIteratorImpl(expr));
     } else {
         throw std::runtime_error("Unknown iterator type: " + type);
     }
@@ -233,6 +235,60 @@ void PostOrderIteratorImpl::get_next(Expr* expr) {
     }
 
     m_stack.push(expr);
+}
+
+/* LevelOrderIteratorImpl */
+
+LevelOrderIteratorImpl::LevelOrderIteratorImpl(Expr* expr) {
+    if (expr != 0) {
+        m_queue.push(expr);
+    }
+}
+
+LevelOrderIteratorImpl& LevelOrderIteratorImpl::operator++() {
+    Expr* node = m_queue.front();
+    m_queue.pop();
+
+    if (node->left().get() != 0) {
+        m_queue.push(node->left().get());
+    }
+
+    if (node->right().get() != 0) {
+        m_queue.push(node->right().get());
+    }
+}
+
+Expr& LevelOrderIteratorImpl::operator*() {
+    return *(m_queue.front());
+}
+
+Expr* LevelOrderIteratorImpl::operator->() {
+    return m_queue.front();
+}
+
+bool LevelOrderIteratorImpl::operator==(const IteratorImpl& other) const {
+    const LevelOrderIteratorImpl* level_order_iterator = dynamic_cast<const LevelOrderIteratorImpl *>(&other);
+    if (level_order_iterator == 0) {
+        return false;
+    }
+
+    if (m_queue.empty() && level_order_iterator->m_queue.empty()) {
+        return true;
+    }
+
+    if (m_queue.empty() || level_order_iterator->m_queue.empty()) {
+        return false;
+    }
+
+    if (m_queue.front() == level_order_iterator->m_queue.front()) {
+        return true;
+    }
+
+    return false;
+}
+
+bool LevelOrderIteratorImpl::operator!=(const IteratorImpl& other) const {
+    return !(*this == other);
 }
 
 } // namespace impl

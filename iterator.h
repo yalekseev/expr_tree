@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <queue>
 #include <stack>
 
 class Expr;
@@ -107,6 +108,25 @@ private:
     void get_next(Expr* expr);
 
     std::stack<Expr*> m_stack;
+};
+
+/*! \brief Implementation of level-order iterator */
+class LevelOrderIteratorImpl : public IteratorImpl {
+public:
+    explicit LevelOrderIteratorImpl(Expr* expr = 0);
+
+    virtual LevelOrderIteratorImpl& operator++();
+
+    virtual Expr& operator*();
+
+    virtual Expr* operator->();
+
+    virtual bool operator==(const IteratorImpl& other) const;
+
+    virtual bool operator!=(const IteratorImpl& other) const;
+
+private:
+    std::queue<Expr*> m_queue;
 };
 
 } // namespace impl

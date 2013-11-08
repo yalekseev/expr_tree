@@ -12,6 +12,7 @@ int main() {
     std::cout << print(*expr, "pre-order") << std::endl;
     std::cout << print(*expr, "in-order") << std::endl;
     std::cout << print(*expr, "post-order") << std::endl;
+    std::cout << print(*expr, "level-order") << std::endl;
 
     return 0;
 }
