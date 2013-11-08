@@ -88,7 +88,7 @@ private:
     std::stack<Expr*> m_stack;
 };
 
-/*! \brief Implementation of pre-order iterator */
+/*! \brief Implementation of post-order iterator */
 class PostOrderIteratorImpl : public IteratorImpl {
 public:
     explicit PostOrderIteratorImpl(Expr* expr = 0);
