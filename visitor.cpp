@@ -69,61 +69,31 @@ double EvalVisitor::result() const {
 /* PrintVisitor */
 
 void PrintVisitor::accept(const AddExpr& expr) {
-    std::string right = m_stack.top();
-    m_stack.pop();
-
-    std::string left = m_stack.top();
-    m_stack.pop();
-
-    m_stack.push("(" + left + " + " + right + ")");
+    os << " + ";
 }
 
 void PrintVisitor::accept(const SubExpr& expr) {
-    std::string right = m_stack.top();
-    m_stack.pop();
-
-    std::string left = m_stack.top();
-    m_stack.pop();
-
-    m_stack.push("(" + left + " - " + right + ")");
+    os << " - ";
 }
 
 void PrintVisitor::accept(const MulExpr& expr) {
-    std::string right = m_stack.top();
-    m_stack.pop();
-
-    std::string left = m_stack.top();
-    m_stack.pop();
-
-    m_stack.push("(" + left + " * " + right + ")");
+    os << " * ";
 }
 
 void PrintVisitor::accept(const DivExpr& expr) {
-    std::string right = m_stack.top();
-    m_stack.pop();
-
-    std::string left = m_stack.top();
-    m_stack.pop();
-
-    m_stack.push("(" + left + " / " + right + ")");
+    os << " / ";
 }
 
 void PrintVisitor::accept(const MinusExpr& expr) {
-    std::string left = m_stack.top();
-    m_stack.pop();
-
-    m_stack.push("-1 * " + left);
+    os << "-";
 }
 
 void PrintVisitor::accept(const PlusExpr& expr) {
-    std::string left = m_stack.top();
-    m_stack.pop();
-
-    m_stack.push("+1 * " + left);
+    os << "+";
 }
 
 void PrintVisitor::accept(const ConstExpr& expr) {
-    m_stack.push(std::to_string(static_cast<double>(expr)));
+    os << " " << std::to_string(static_cast<double>(expr)) << " ";
 }
 
 void PrintVisitor::accept(const VarExpr& expr) {
@@ -131,5 +101,5 @@ void PrintVisitor::accept(const VarExpr& expr) {
 }
 
 std::string PrintVisitor::result() const {
-    return m_stack.top();
+    return os.str();
 }

@@ -2,6 +2,7 @@
 
 #include "expr.h"
 
+#include <sstream>
 #include <string>
 #include <stack>
 
@@ -70,5 +71,5 @@ public:
     std::string result() const;
 
 private:
-    std::stack<std::string> m_stack;
+    std::ostringstream os;
 };

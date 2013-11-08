@@ -9,7 +9,9 @@ int main() {
 
     std::cout << eval(*expr) << std::endl;
 
-    std::cout << print(*expr) << std::endl;
+    std::cout << print(*expr, "pre-order") << std::endl;
+    std::cout << print(*expr, "in-order") << std::endl;
+    std::cout << print(*expr, "post-order") << std::endl;
 
     return 0;
 }

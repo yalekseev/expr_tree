@@ -44,19 +44,21 @@ namespace impl {
 /* PreOrderIteratorImpl */
 
 PreOrderIteratorImpl::PreOrderIteratorImpl(Expr* expr) {
-    m_stack.push(expr);
+    if (expr != 0) {
+        m_stack.push(expr);
+    }
 }
 
 PreOrderIteratorImpl& PreOrderIteratorImpl::operator++() {
     Expr* node = m_stack.top();
     m_stack.pop();
 
-    if (node->left().get() != 0) {
-        m_stack.push(node->left().get());
-    }
-
     if (node->right().get() != 0) {
         m_stack.push(node->right().get());
+    }
+
+    if (node->left().get() != 0) {
+        m_stack.push(node->left().get());
     }
 
     return *this;
@@ -108,7 +110,7 @@ InOrderIteratorImpl& InOrderIteratorImpl::operator++() {
     m_stack.pop();
 
     if (node->right().get() != 0) {
-        get_next(node);
+        get_next(node->right().get());
     }
 
     return *this;
